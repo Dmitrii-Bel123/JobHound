@@ -1,4 +1,9 @@
 Django>=5.2
 psycopg2-binary>=2.9
+django-allauth
 python-dotenv
 django-environ
+requests>=2.31.0
+PyJWT==2.8.0
+python3-openid==3.2.0
+cryptography>=42.0.0

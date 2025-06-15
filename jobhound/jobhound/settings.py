@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,6 +23,39 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split()
 
 
+# Auth
+SITE_ID = 1
+# как Django должен авторизовывать пользователей:
+AUTHENTICATION_BACKENDS= [
+    'django.contrib.auth.backends.ModelBackend', # Необходимо войти под именем пользователя в Django admin, независимо от "allauth`
+    'allauth.account.auth_backends.AuthenticationBackend', # Специальные методы аутентификации "allauth", такие как вход в систему по электронной почте
+]
+LOGIN_REDIRECT_URL = 'users:dashboard'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
+ACCOUNT_EMAIL_VERIFICATION = 'none' # подтверждение email
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+LOGIN_URL = 'account_login'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_SECRET_KEY'),
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type':'online',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    }
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,16 +63,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.users.apps.UsersConfig',  # Полный путь до конфига приложения
-    'apps.jobs.apps.JobsConfig',    # Аналогично для других приложений
+
+    # APPS
+    'apps.jobs.apps.JobsConfig',
     'apps.notifications.apps.NotificationsConfig',
     'apps.api.apps.ApiConfig',
     'apps.search.apps.SearchConfig',
+
+    # Auth
+    'apps.users.apps.UsersConfig',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
