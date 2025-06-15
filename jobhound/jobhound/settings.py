@@ -31,6 +31,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.users.apps.UsersConfig',  # Полный путь до конфига приложения
     'apps.jobs.apps.JobsConfig',    # Аналогично для других приложений
+    'apps.notifications.apps.NotificationsConfig',
+    'apps.api.apps.ApiConfig',
+    'apps.search.apps.SearchConfig',
 ]
 
 MIDDLEWARE = [
