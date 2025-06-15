@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.users.apps.UsersConfig',  # Полный путь до конфига приложения
+    'apps.jobs.apps.JobsConfig',    # Аналогично для других приложений
 ]
 
 MIDDLEWARE = [
@@ -46,7 +48,7 @@ ROOT_URLCONF = 'jobhound.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
